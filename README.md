@@ -50,8 +50,11 @@
 
 #### **Bug Report 1**
 **Bug ID:** BUG-001
+
 **Title:** System allows creation of employees with duplicate email addresses.
+
 **Description:** The requirements state that "Email must be unique." However, the system currently allows a user to create a new employee record using an email address that is already assigned to another existing employee.
+
 **Steps to Reproduce:**
 1. Navigate to the "Create Employee" page.
 2. Create an employee with Email: `test@domain.com` and save.
@@ -59,28 +62,42 @@
 4. Enter different Name details but enter the SAME Email: `test@domain.com`.
 5. Fill remaining mandatory fields.
 6. Click "Save".
+   
 **Expected Result:** The system should display a validation error: "Email already exists" and prevent saving.
+
 **Actual Result:** The system saves the new employee, resulting in two records with the same email.
+
 **Severity:** High (Violates database integrity and business rules).
+
 **Priority:** High (Must be fixed before release).
 
 ***
 
 #### **Bug Report 2**
 **Bug ID:** BUG-002
+
 **Title:** Search functionality does not return results for partial keyword matches.
+
 **Description:** The Employee List search bar only returns results when the exact full name is entered. Users cannot find employees by typing the first name or a substring of the name.
+
 **Steps to Reproduce:**
+
 1. Navigate to the Employee List page.
 2. Identify an existing employee (e.g., Name: "Sarah Jones").
 3. In the search bar, type "Sarah".
 4. Press Enter/Click Search.
+   
 **Expected Result:** The table should filter to show "Sarah Jones".
+
 **Actual Result:** The table displays "No records found" or remains empty.
+
 **Severity:** Medium (Usability issue).
+
 **Priority:** Medium (Impedes workflow but workarounds exist via exact typing).
 
-Here is the automation script rewritten using **Selenium WebDriver with Java**.
+ ### **Part 5: Automation**
+ 
+ The **automation script** rewritten using **Selenium WebDriver with Java**.
 
 ### Prerequisites
 *   **Java Development Kit (JDK)** installed.
