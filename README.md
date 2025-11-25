@@ -188,7 +188,6 @@ public class EmployeeCreationTest {
         }
 
         // --- Teardown ---
-        System.out.println("\n--- Tests Finished. Closing Browser. ---");
         driver.quit();
     }
 }
