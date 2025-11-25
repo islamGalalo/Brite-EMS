@@ -86,5 +86,93 @@ Here is the automation script rewritten using **Selenium WebDriver with Java**.
 *   **Java Development Kit (JDK)** installed.
 *   **IDE** (Eclipse, IntelliJ IDEA).
 *   **Selenium Dependencies** (If using Maven, add `selenium-java` to your `pom.xml`).
-*   **ChromeDriver** (Selenium 4.6+ manages this automatically; otherwise, download the driver matching your Chrome version).
+*   **ChromeDriver** (Selenium 4.6+ manages this automatically).
 
+  
+```java
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+
+public class EmployeeCreationTest {
+
+    public static void main(String[] args) throws InterruptedException {
+        
+        // --- 1. Setup ---
+        // Selenium Manager automatically handles the browser driver
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        
+        // Define explicit wait
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        String baseUrl = "http://your-ems-application.com/create";
+
+        // ============================================================
+        // TEST SCENARIO 1: Verify successful employee creation
+        // ============================================================
+        System.out.println("--- Starting Test 1: Valid Employee Creation ---");
+        
+        driver.get(baseUrl);
+
+        // Locate elements
+        WebElement nameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        WebElement emailField = driver.findElement(By.id("email"));
+        WebElement phoneField = driver.findElement(By.id("phone"));
+        WebElement deptField  = driver.findElement(By.id("department"));
+        WebElement dateField  = driver.findElement(By.id("joiningDate"));
+        WebElement saveBtn    = driver.findElement(By.id("btnSave"));
+
+        // Generate unique email based on timestamp
+        String uniqueEmail = "user" + System.currentTimeMillis() + "@test.com";
+
+        // Perform Actions
+        nameField.sendKeys("Java User");
+        emailField.sendKeys(uniqueEmail);
+        phoneField.sendKeys("1234567890");
+        deptField.sendKeys("IT");
+        dateField.sendKeys("2023-11-01");
+        
+        saveBtn.click();
+
+        // Validation: Check if URL changes to employee list
+        wait.until(ExpectedConditions.urlContains("employee-list"));
+        System.out.println("PASS: Employee created and redirected successfully.");
+
+
+        // ============================================================
+        // TEST SCENARIO 2: Verify System Rejects Invalid Email
+        // ============================================================
+        System.out.println("\n--- Starting Test 2: Invalid Email Validation ---");
+        
+        driver.get(baseUrl);
+
+        // Re-locate elements (to avoid StaleElementReferenceException after page refresh)
+        WebElement nameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("name")));
+        WebElement emailInput = driver.findElement(By.id("email"));
+        WebElement saveButton = driver.findElement(By.id("btnSave"));
+
+        // Enter Invalid Data
+        nameInput.sendKeys("Test User");
+        emailInput.sendKeys("invalid-email-format-no-domain"); // Missing @
+        
+        saveButton.click();
+
+        // Validation: Check for error message visibility
+        WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("error-message")));
+        
+        if(errorMsg.getText().contains("valid email")) {
+            System.out.println("PASS: System correctly displayed error: " + errorMsg.getText());
+        } else {
+            System.out.println("FAIL: Unexpected message: " + errorMsg.getText());
+        }
+
+        // --- Teardown ---
+        System.out.println("\n--- Tests Finished. Closing Browser. ---");
+        driver.quit();
+    }
+}
+```
